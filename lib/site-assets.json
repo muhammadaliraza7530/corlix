@@ -1,0 +1,28 @@
+{
+  "siteHero": {
+    "src": "/home-hero/hero-1.png",
+    "alt": "Corelix Systems digital engineering team building scalable websites, apps, and AI solutions",
+    "width": 1600,
+    "height": 900
+  },
+  "founder": {
+    "src": "/ceo/ceo.jpg",
+    "alt": "Muhammad Ali Raza, founder and CEO of Corelix Systems",
+    "width": 1200,
+    "height": 1200
+  },
+  "portfolio": [
+    {
+      "src": "/projects/project-1.png",
+      "alt": "Corelix Systems website project for Shawarma Stop restaurant brand",
+      "width": 1600,
+      "height": 1000
+    },
+    {
+      "src": "/projects/project-2.png",
+      "alt": "Corelix Systems website project for Blue Ladder Developers property business",
+      "width": 1600,
+      "height": 1000
+    }
+  ]
+}
