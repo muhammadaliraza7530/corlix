@@ -20,6 +20,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Copy `.env.example` to `.env.local` and add the Gmail address and Google App Password used for SMTP. Gmail requires 2-Step Verification and an App Password; do not use your regular Google account password.
 
+## AI Chatbot
+
+Add a Gemini API key to the environment used by Next.js:
+
+```env
+GEMINI_API_KEY=your-gemini-api-key
+GEMINI_MODEL=gemini-3.6-flash
+```
+
+Restart the development server after changing environment variables.
+
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.

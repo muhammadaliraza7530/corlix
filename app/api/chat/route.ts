@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AGENCY_INFO, PORTFOLIO_PROJECTS, SERVICES } from '@/lib/data';
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_MODEL = process.env.GEMINI_MODEL || 'gemini-3.6-flash';
 
 function buildKnowledgeBase() {
   const servicesText = SERVICES.map((service) => {
@@ -55,14 +56,16 @@ Instructions:
 
 async function askGemini(question: string) {
   const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        systemInstruction: buildKnowledgeBase(),
+        systemInstruction: {
+          parts: [{ text: buildKnowledgeBase() }],
+        },
         contents: [
           {
             role: 'user',

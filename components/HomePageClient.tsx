@@ -74,6 +74,16 @@ export default function HomePageClient() {
 
     if (!capabilitiesSection || !video) return;
 
+    const preloadObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          video.load();
+          preloadObserver.disconnect();
+        }
+      },
+      { rootMargin: '500px 0px' }
+    );
+
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
@@ -83,20 +93,24 @@ export default function HomePageClient() {
         if (entry.isIntersecting) {
           video.muted = false;
           video.volume = 1;
-          video.play().catch(() => {
-            // Some browsers block autoplay with sound until user interaction.
+          void video.play().catch(() => {
+            video.muted = true;
+            void video.play().catch(() => undefined);
           });
         } else {
           video.pause();
-          video.currentTime = 0;
         }
       },
       { threshold: 0.35 }
     );
 
+    preloadObserver.observe(capabilitiesSection);
     observer.observe(capabilitiesSection);
 
-    return () => observer.disconnect();
+    return () => {
+      preloadObserver.disconnect();
+      observer.disconnect();
+    };
   }, []);
 
   return (
@@ -176,7 +190,7 @@ export default function HomePageClient() {
       >
         <div className="pointer-events-none absolute left-1/2 top-0 h-[300px] w-[600px] -translate-x-1/2 rounded-full bg-[rgba(0,136,255,0.08)] blur-[120px]" />
         <div className="relative mx-auto max-w-7xl space-y-10">
-          <div className="w-full overflow-hidden rounded-[28px] border border-[rgba(255,255,255,0.08)] bg-black/20 shadow-[0_24px_70px_rgba(0,0,0,0.28)] backdrop-blur-sm">
+          <div className="w-full overflow-hidden rounded-[28px]  border-[rgba(255,255,255,0.08)] bg-black/20 shadow-[0_24px_70px_rgba(0,0,0,0.28)] backdrop-blur-sm">
             <div className="mx-auto aspect-[9/16] w-full max-w-[420px] overflow-hidden rounded-[22px] bg-black md:max-w-[480px]">
               <video
                 ref={capabilitiesVideoRef}
@@ -185,7 +199,7 @@ export default function HomePageClient() {
                 loop
                 muted
                 playsInline
-                preload="auto"
+                preload="none"
                 className="h-full w-full object-cover"
               />
             </div>
