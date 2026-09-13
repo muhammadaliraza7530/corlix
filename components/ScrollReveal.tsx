@@ -33,8 +33,8 @@ export default function ScrollReveal({
   className = '',
   variant = 'fade-up',
   delay = 0,
-  duration = 600,
-  threshold = 0.2,
+  duration = 700, // Slightly longer default for smoother glide
+  threshold = 0.15,
   once = true,
   stagger = 0,
 }: ScrollRevealProps) {
@@ -49,55 +49,48 @@ export default function ScrollReveal({
       ([entry]) => {
         if (entry.isIntersecting) {
           setIsVisible(true);
-          if (once) {
-            observer.unobserve(element);
-          }
+          if (once) observer.unobserve(element);
         } else if (!once) {
           setIsVisible(false);
         }
       },
       {
         threshold,
-        rootMargin: '0px 0px -50px 0px',
+        // Trigger the animation slightly before the element is fully in view
+        rootMargin: '0px 0px -80px 0px', 
       }
     );
 
     observer.observe(element);
-
-    return () => {
-      observer.disconnect();
-    };
+    return () => observer.disconnect();
   }, [once, threshold]);
 
   const getInitialTransform = (): string => {
     switch (variant) {
       case 'fade-up':
-        return 'translateY(30px)';
-      case 'fade-down':
-        return 'translateY(-30px)';
-      case 'fade-left':
-        return 'translateX(30px)';
-      case 'fade-right':
-        return 'translateX(-30px)';
-      case 'zoom-in':
-        return 'scale(0.9)';
-      case 'zoom-out':
-        return 'scale(1.1)';
-      case 'scale-fade':
-        return 'scale(0.95)';
       case 'slide-up':
-        return 'translateY(40px)';
+        return 'translate3d(0, 40px, 0)';
+      case 'fade-down':
       case 'slide-down':
-        return 'translateY(-40px)';
+        return 'translate3d(0, -40px, 0)';
+      case 'fade-left':
+        return 'translate3d(40px, 0, 0)';
+      case 'fade-right':
+        return 'translate3d(-40px, 0, 0)';
+      case 'zoom-in':
+      case 'scale-fade':
+        return 'scale3d(0.92, 0.92, 1)';
+      case 'zoom-out':
+        return 'scale3d(1.08, 1.08, 1)';
       case 'bounce-in':
       case 'spring-bounce':
-        return 'scale(0.8)';
+        return 'scale3d(0.8, 0.8, 1)';
       case 'rotate-in':
-        return 'rotate(-5deg) scale(0.95)';
+        return 'rotate(-4deg) scale3d(0.95, 0.95, 1)';
       case 'flip-in':
-        return 'rotateY(90deg)';
+        return 'perspective(1000px) rotateY(80deg)';
       default:
-        return 'translateY(30px)';
+        return 'translate3d(0, 40px, 0)';
     }
   };
 
@@ -105,60 +98,63 @@ export default function ScrollReveal({
     switch (variant) {
       case 'bounce-in':
       case 'spring-bounce':
-        return 'cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+        return 'cubic-bezier(0.34, 1.56, 0.64, 1)';
       case 'zoom-in':
       case 'zoom-out':
       case 'scale-fade':
-        return 'cubic-bezier(0.34, 1.56, 0.64, 1)';
+        return 'cubic-bezier(0.16, 1, 0.3, 1)';
+      case 'flip-in':
+      case 'rotate-in':
+        return 'cubic-bezier(0.45, 0, 0.55, 1)';
       default:
-        return 'cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        // Premium EaseOutExpo curve
+        return 'cubic-bezier(0.16, 1, 0.3, 1)';
     }
   };
 
-  const renderChildren = () => {
-    if (!stagger || stagger <= 0) return children;
-
-    return React.Children.map(children, (child, index) => {
-      if (!React.isValidElement(child)) return child;
-
-      const computedDelay = delay + index * stagger;
-
-      return (
-        <div
-          key={child.key ?? index}
-          style={{
-            opacity: isVisible ? 1 : 0,
-            transform: isVisible ? 'none' : getInitialTransform(),
-            transition: `opacity ${duration}ms ${getEasing()} ${computedDelay}ms, transform ${duration}ms ${getEasing()} ${computedDelay}ms`,
-          }}
-        >
-          {child}
-        </div>
-      );
-    });
+  const getTransitionStyles = (computedDelay: number): React.CSSProperties => {
+    return {
+      opacity: isVisible ? 1 : 0,
+      transform: isVisible
+        ? variant === 'flip-in'
+          ? 'perspective(1000px) rotateY(0)'
+          : 'translate3d(0, 0, 0) scale3d(1, 1, 1)'
+        : getInitialTransform(),
+      transition: `opacity ${duration}ms ${getEasing()} ${computedDelay}ms, transform ${duration}ms ${getEasing()} ${computedDelay}ms`,
+      willChange: 'opacity, transform',
+      backfaceVisibility: 'hidden',
+    };
   };
 
+  // If no stagger, apply styles to the container div
   if (!stagger || stagger <= 0) {
     return (
       <div
         ref={containerRef}
         className={className}
-        style={{
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'none' : getInitialTransform(),
-          transition: `opacity ${duration}ms ${getEasing()} ${delay}ms, transform ${duration}ms ${getEasing()} ${delay}ms`,
-          backfaceVisibility: 'hidden',
-          willChange: isVisible ? 'auto' : 'opacity, transform',
-        }}
+        style={getTransitionStyles(delay)}
       >
         {children}
       </div>
     );
   }
 
+  // If stagger is applied, inject styles directly into children to preserve Grid/Flex layouts
   return (
     <div ref={containerRef} className={className}>
-      {renderChildren()}
+      {React.Children.map(children, (child, index) => {
+        if (!React.isValidElement(child)) return child;
+
+        const computedDelay = delay + index * stagger;
+        const childProps = child.props as { style?: React.CSSProperties };
+        
+        return React.cloneElement(child, {
+          style: {
+            ...childProps.style,
+            ...getTransitionStyles(computedDelay),
+          },
+        } as { style?: React.CSSProperties });
+      })}
     </div>
   );
 }
