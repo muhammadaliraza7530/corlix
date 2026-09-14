@@ -59,7 +59,7 @@ export default function CapabilitiesSection() {
   return (
     <section
       ref={capabilitiesSectionRef}
-      className="relative overflow-hidden bg-zinc-950 px-6 py-20 sm:py-28"
+      className="site-section-shell px-6 py-20 sm:py-28"
     >
       {/* Ambient Background Effects */}
       <div className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[800px] -translate-x-1/2 rounded-full bg-[#2084ba]/10 blur-[150px]" />

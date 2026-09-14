@@ -20,7 +20,7 @@ const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
 
 export default function WhyChooseUsSection() {
   return (
-    <section className="relative overflow-hidden bg-zinc-950 px-6 py-20 sm:py-28">
+    <section className="site-section-shell px-6 py-20 sm:py-28">
       {/* Ambient Background Effects */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#2084ba]/10 blur-[150px]" />
       <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] [background-size:32px_32px] opacity-10 pointer-events-none" />

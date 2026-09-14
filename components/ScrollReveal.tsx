@@ -56,8 +56,7 @@ export default function ScrollReveal({
       },
       {
         threshold,
-        // Trigger the animation slightly before the element is fully in view
-        rootMargin: '0px 0px -80px 0px', 
+        rootMargin: '0px 0px -10% 0px',
       }
     );
 
@@ -120,9 +119,11 @@ export default function ScrollReveal({
           ? 'perspective(1000px) rotateY(0)'
           : 'translate3d(0, 0, 0) scale3d(1, 1, 1)'
         : getInitialTransform(),
-      transition: `opacity ${duration}ms ${getEasing()} ${computedDelay}ms, transform ${duration}ms ${getEasing()} ${computedDelay}ms`,
-      willChange: 'opacity, transform',
+      filter: isVisible ? 'blur(0)' : 'blur(8px)',
+      transition: `opacity ${duration}ms ${getEasing()} ${computedDelay}ms, transform ${duration}ms ${getEasing()} ${computedDelay}ms, filter ${duration}ms ${getEasing()} ${computedDelay}ms`,
+      willChange: 'opacity, transform, filter',
       backfaceVisibility: 'hidden',
+      transformOrigin: 'center center',
     };
   };
 

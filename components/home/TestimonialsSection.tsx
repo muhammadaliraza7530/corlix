@@ -9,7 +9,7 @@ export default function TestimonialsSection() {
   const marqueeTestimonials = [...TESTIMONIALS, ...TESTIMONIALS];
 
   return (
-    <section className="relative overflow-hidden bg-zinc-950 px-6 py-20 sm:py-28">
+    <section className="site-section-shell px-6 py-20 sm:py-28">
       {/* Ambient Background Effects */}
       <div className="pointer-events-none absolute left-1/2 top-1/2 h-[400px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#2084ba]/10 blur-[150px]" />
       <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] [background-size:32px_32px] opacity-10 pointer-events-none" />
@@ -30,7 +30,11 @@ export default function TestimonialsSection() {
         </ScrollReveal>
 
         {/* Marquee with CSS Mask for smooth edges */}
-        <div className="testimonials-marquee relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+        <ScrollReveal
+          variant="fade-up"
+          duration={800}
+          className="testimonials-marquee relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
+        >
           <div className="testimonials-track flex w-max gap-6 py-2">
             {marqueeTestimonials.map((t, index) => (
               <div key={`${t.id}-${index}`} className="w-[320px] sm:w-[360px] lg:w-[390px] shrink-0">
@@ -38,7 +42,7 @@ export default function TestimonialsSection() {
               </div>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

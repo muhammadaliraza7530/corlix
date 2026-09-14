@@ -10,7 +10,7 @@ export default function ProjectsSection() {
   const featuredProjects = PORTFOLIO_PROJECTS.slice(0, 3);
 
   return (
-    <section className="relative overflow-hidden bg-zinc-950 px-6 py-20 sm:py-28">
+    <section className="site-section-shell px-6 py-20 sm:py-28">
       {/* Ambient Background Effects */}
       <div className="pointer-events-none absolute right-1/4 top-10 h-[400px] w-[600px] rounded-full bg-[#2084ba]/10 blur-[150px]" />
       <div className="absolute inset-0 bg-[radial-gradient(#27272a_1px,transparent_1px)] [background-size:32px_32px] opacity-10 pointer-events-none" />
@@ -44,6 +44,7 @@ export default function ProjectsSection() {
         <ScrollReveal
           variant="fade-up"
           stagger={120}
+          duration={750}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {featuredProjects.map((project) => (

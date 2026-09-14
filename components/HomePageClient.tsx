@@ -8,7 +8,7 @@ import WhyChooseUsSection from '@/components/WhyChooseUsSection';
 
 export default function HomePageClient() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex min-h-screen w-full flex-col gap-0 py-0">
       <HeroSection />
       <CapabilitiesSection />
       <ProjectsSection />

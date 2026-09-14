@@ -53,7 +53,7 @@ function CountUpMetric({ value }: { value: string }) {
 
 export default function HeroSection() {
   return (
-    <section className="relative isolate overflow-hidden bg-zinc-950 pt-28 pb-24 sm:pt-32 sm:pb-32">
+    <section className="site-section-shell relative isolate pt-28 pb-24 sm:pt-32 sm:pb-32">
       {/* Background Layers */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <Image
@@ -75,7 +75,7 @@ export default function HeroSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 space-y-12">
         
         {/* Badge */}
-        <div className="flex justify-center animate-fade-up opacity-0 [animation-fill-mode:forwards] [animation-delay:200ms]">
+        <div className="flex justify-center">
           <div className="group inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-zinc-900/50 border border-zinc-700 backdrop-blur-xl text-xs font-mono text-zinc-300 shadow-lg transition-colors duration-300 hover:border-[#2084ba]/50 cursor-default">
             <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
             <span>Digital Agency <span className="text-[#2084ba] font-bold">Pakistan</span></span>
@@ -83,7 +83,7 @@ export default function HeroSection() {
         </div>
 
         {/* Main Heading & Paragraph */}
-        <div className="max-w-4xl mx-auto text-center space-y-6 animate-fade-up opacity-0 [animation-fill-mode:forwards] [animation-delay:400ms]">
+        <div className="max-w-4xl mx-auto text-center space-y-6">
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.05] drop-shadow-[0_4px_12px_rgba(0,0,0,0.5)]">
             Transforming Bold Ideas Into{' '}
             <span className="bg-gradient-to-r from-[#2084ba] to-[#4cb5e6] bg-clip-text text-transparent drop-shadow-[0_4px_20px_rgba(32,132,186,0.25)]">
@@ -120,8 +120,8 @@ export default function HeroSection() {
           {AGENCY_INFO.stats.map((stat, i) => (
             <div
               key={i}
-              className="group relative p-5 sm:p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800 backdrop-blur-xl text-center overflow-hidden transition-all duration-300 hover:border-[#2084ba]/50 hover:-translate-y-2 hover:shadow-[0_15px_40px_-15px_rgba(32,132,186,0.3)] animate-fade-up opacity-0 [animation-fill-mode:forwards]"
-              style={{ animationDelay: `${600 + i * 100}ms` }}
+              className="group relative p-5 sm:p-6 rounded-2xl bg-zinc-900/40 border border-zinc-800 backdrop-blur-xl text-center overflow-hidden transition-all duration-300 hover:border-[#2084ba]/50 hover:-translate-y-2 hover:shadow-[0_15px_40px_-15px_rgba(32,132,186,0.3)]"
+              style={{ transitionDelay: `${i * 80}ms` }}
             >
               {/* Hover Glow */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-b from-[#2084ba]/10 to-transparent" />
